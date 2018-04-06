@@ -63,6 +63,7 @@ class QueryData:
 
         return ( x/len(data) )
 
+    #return standard deviation of items in list data
     def find_standard_deviation(self, data, mean):
         x = 0
         for i in data:

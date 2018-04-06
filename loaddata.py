@@ -1,5 +1,4 @@
 import csv
-#import xmljson
 from pymongo import MongoClient
 
 client = MongoClient()
@@ -32,6 +31,10 @@ class LoadData:
         #gene association
         self.add_to_db('data/PPI.csv', self.association, "csv")
 
+        #expression of genes
+        print("loading gene expression")
+        self.add_to_db('data/ROSMAP_RNASeq_entrez.csv', self.expression, "csv")
+
         print("adding uniprot")
         #add uniprot id to expression profile
         self.add_uniprot_id()
@@ -40,23 +43,6 @@ class LoadData:
         #add associated genes to expression profile
         self.add_associated_id()
 
-        print("adding expression")
-        self.add_to_db('data/ROSMAP_RNASeq_entrez.csv', self.expression, "csv")
-    
-
-    def load_xml(self):
-        print("adding xml")
-        #add associated genes to expression profile
-        #self.add_associated_id()
-
-
-    def test_append(self):
-        for entrez_doc in self.genes.find({'entrez_id': '90639'}):
-            entrez_doc['uniprot_id'] = []
-            for uni_doc in self.uniprot.find({'entrez_id': '90639'}):
-                #add the returned values as a list to the fields in expression profile document
-                entrez_doc['uniprot_id'].append(uni_doc['uniprot_id'])
-            self.genes.save(entrez_doc)
 
     #add uniprot id to expression profile
     def add_uniprot_id(self):
