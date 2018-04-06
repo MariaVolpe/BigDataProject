@@ -1,5 +1,6 @@
 import csv
 from pymongo import MongoClient
+import xml.etree.ElementTree as ET
 
 client = MongoClient()
 
@@ -18,6 +19,7 @@ class LoadData:
         #collection: expression information
         self.expression = self.db.expression
 
+    #load all files into database
     def load_files(self):
         #Expression Profile
         print("loading genes")
@@ -35,16 +37,21 @@ class LoadData:
         print("loading gene expression")
         self.add_to_db('data/ROSMAP_RNASeq_entrez.csv', self.expression, "csv")
 
+        #xml file information
+        print("adding xml")
+        self.add_xml('data/uniprot-human.xml')
+
         print("adding uniprot")
-        #add uniprot id to expression profile
+        #add uniprot id to genes collection documents
         self.add_uniprot_id()
 
         print("adding associated")
-        #add associated genes to expression profile
+        #add associated genes to genes collection documents
         self.add_associated_id()
 
+    
 
-    #add uniprot id to expression profile
+    #add uniprot id to genes collection documents
     def add_uniprot_id(self):
         #for every item in collection, query the entrez id from uniprot collection
         for entrez_doc in self.genes.find():
@@ -54,6 +61,8 @@ class LoadData:
                 entrez_doc['uniprot_id'].append(uni_doc['uniprot_id'])
             self.genes.save(entrez_doc)
 
+
+    #add associated genes to genes collection documents
     def add_associated_id(self):
         #for every item in collection, query the entrez id from uniprot collection
         for entrez_doc in self.genes.find():
@@ -65,6 +74,7 @@ class LoadData:
                 entrez_doc['associated_genes'].append(uni_doc['interactor_B'])
             self.genes.save(entrez_doc)
 
+    #adds dictionary returned from parsing the file to the specified collection
     def add_to_db(self, csv_file, collection, type):
         if type == "text":
             data_dicts = self.parse_text(csv_file)
@@ -92,3 +102,23 @@ class LoadData:
             for line in reader:
                 data.append(line)
         return data
+
+    #parses xml file and adds it to collection xml
+    def add_xml(self, xmlfile):
+        tree = ET.parse(xmlfile)
+        root = tree.getroot()
+        items = []
+        for item in root.iter():
+            itemdict = {}
+            for child in item:
+                itemdict[child.tag] = child.text
+            items.append(itemdict)
+        fields = ['accession', 'name', 'fullName', 'alt-fullName', 'gene-primary','gene-synonym', 'organism-sci', 'organism-common',
+        'lineage', 'title', 'authorList', 'source']
+        new_file = 'data/xmltocsv.csv'
+        with open(new_file, 'w') as cf:
+            writer = csv.DictWriter(cf, fieldnames = fields)
+            writer.writeheader()
+            writer.writerows(items)
+
+        add_to_db(new_file, self.xml, 'csv') 
