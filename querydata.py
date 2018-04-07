@@ -2,6 +2,7 @@ import loaddata
 import csv
 import math
 from pymongo import MongoClient
+from pprint import pprint
 
 client = MongoClient()
 
@@ -21,9 +22,9 @@ class QueryData:
 
     #given an entrez id, find all other information associated with the gene
     def get_all_information(self, gene_id):
-        print("querying for gene_id")
+        print("Querying for Entrez_ID: {}...".format(gene_id))
         for entrez_doc in self.genes.find({'entrez_id':gene_id}):
-            print(entrez_doc)
+            pprint(entrez_doc)
 
     #given an entrez id, find the mean and standard deviation of its expression for AD, MCI, and NCI
     # NCI - 1
