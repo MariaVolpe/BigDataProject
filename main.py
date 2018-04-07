@@ -1,19 +1,20 @@
-# from pymongo import MongoClient
-# import loaddata
-# import querydata
-import query_patient
-import query_gene
-import query_norder
+from pymongo import MongoClient
+import loaddata
+import querydata
 
-#client = MongoClient()
+# import query_patient
+# import query_gene
+# import query_norder
+
+client = MongoClient()
 
 class Interaction:
 
     def __init__(self):
         #DB: GeneInformation
-        #self.db = client.GeneInformation
+        self.db = client.GeneInformation
         #collection: genes
-        #self.genes = self.db.genes
+        self.genes = self.db.genes
 
     def load(self):
         obj = loaddata.LoadData()
@@ -34,9 +35,10 @@ class Interaction:
     def get_patient(self, patient_id):
         dummy = 0
 
-    def find(self, dictionary):
-        #self.genes.find(dictionary)
-        dummy = 0
+    def find(self, item):
+        query_obj = querydata.QueryData()
+        query_obj.get_custom(item)
+        
 
 def main():
 
@@ -57,14 +59,13 @@ def main():
     B. Given an entrez id, find mean and std of gene expression values for AD/MCI/NCI, respectively
     C. Given an entrez id, find all other information associated with this gene
     D. Given a patient id, find all patient information (age, gender, education etc.)
-    E. Query from the gene collection
-    F. Exit program
+    E. Exit program
     """
     print(selectionMenu)
 
     selectedOption = "A"
 
-    while selectedOption != 'F':
+    while selectedOption != 'E':
         selectedOption = input("Select an option: ")
         if selectedOption == 'A':
             # query = query_norder.QueryNOrder()
@@ -85,17 +86,9 @@ def main():
             dummy = 0
 
         elif selectedOption == 'E':
-            s = input("Field to search: ")
-            s = s.strip()
-            z = input("Value in field: ")
-            z = z.strip()
-            d = {s:z}
-            obj.find(d)
-
-        elif selectedOption == 'F':
             break
         else:
-            selectedOption = input("Input Error: Please enter a letter from A-F")
+            selectedOption = input("Input Error: Please enter a letter from A-E \n")
 
 
 
