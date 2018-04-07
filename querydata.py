@@ -22,7 +22,7 @@ class QueryData:
 
     #given an entrez id, find all other information associated with the gene
     def get_all_information(self, gene_id):
-        print("Querying for Entrez_ID: {}...".format(gene_id))
+        print("Querying all information for Entrez_ID: {}...".format(gene_id))
         for entrez_doc in self.genes.find({'entrez_id':gene_id}):
             pprint(entrez_doc)
 
@@ -31,7 +31,7 @@ class QueryData:
     # MCI - 2, 3
     # AD - 4, 5
     def get_stats(self, gene_id):
-        print("calculating stats for gene_id")
+        print("Calculating stats for Entrez ID: {}...".format(gene_id))
         nci = []
         mci = []
         ad = []
