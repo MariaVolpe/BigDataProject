@@ -29,6 +29,12 @@ def main():
 
     obj = Interaction()
 
+    s = input("Ready to load database? Y/N")
+    if (s = "Y"):
+        obj.load()
+    else:
+        exit()
+
     projectInfo = """
     CSCI 49369 - Big Data Project I
     Creators: Maria Volpe and Maria Mahin
