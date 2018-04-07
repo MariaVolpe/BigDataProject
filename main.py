@@ -1,25 +1,20 @@
 from pymongo import MongoClient
 import loaddata
 import querydata
-
-# import query_patient
-# import query_gene
-# import query_norder
+import query_patient
+import query_gene
+import query_norder
 
 client = MongoClient()
 
 class Interaction:
 
     def __init__(self):
-        #DB: GeneInformation
-        self.db = client.GeneInformation
-        #collection: genes
-        self.genes = self.db.genes
-
+        dummy = 0
+        
     def load(self):
         obj = loaddata.LoadData()
-        #obj.load_files()
-        print("testing mode. feature not allowed")
+        obj.load_files()
 
     def get_stats(self, entrez_id):
         query_obj = querydata.QueryData()
@@ -29,16 +24,6 @@ class Interaction:
         query_obj = querydata.QueryData()
         query_obj.get_all_information(entrez_id)
 
-    def get_associated(self, entrez_id, n):
-        dummy = 0
-
-    def get_patient(self, patient_id):
-        dummy = 0
-
-    def find(self, item):
-        query_obj = querydata.QueryData()
-        query_obj.get_custom(item)
-        
 
 def main():
 
