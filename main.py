@@ -1,10 +1,9 @@
 from pymongo import MongoClient
-import load_gene
-import query_gene
+from internal import load_gene
+from internal import query_gene
+# from internal import query_patient
+# from internal import query_norder
 from pprint import pprint
-# import query_patient
-# import query_gene
-# import query_norder
 
 client = MongoClient()
 
@@ -110,7 +109,6 @@ def main():
             break
         else:
             selectedOption = input("Input Error: Please enter a letter from A-F \n")
-
 
 
 if __name__ == "__main__":
