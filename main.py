@@ -1,20 +1,24 @@
 from pymongo import MongoClient
 import loaddata
 import querydata
-import query_patient
-import query_gene
-import query_norder
+from pprint import pprint
+# import query_patient
+# import query_gene
+# import query_norder
 
 client = MongoClient()
 
 class Interaction:
 
     def __init__(self):
-        dummy = 0
+        self.db = client.GeneInformation
+        #collection: genes
+        self.genes = self.db.genes
         
     def load(self):
         obj = loaddata.LoadData()
-        obj.load_files()
+        if obj.loaded == False:
+            obj.load_files()
 
     def get_stats(self, entrez_id):
         query_obj = querydata.QueryData()
@@ -24,16 +28,36 @@ class Interaction:
         query_obj = querydata.QueryData()
         query_obj.get_all_information(entrez_id)
 
+    def advanced(self):
+        
+        projectInfo = """
+        Advanced Query mode:
+        Enter your query in mongoDB syntax to search information about genes.
+        Ex. find({"gene_symbol" : "TNN"})
+        Type quit() to go back to the main menu.
+        """
+        print(projectInfo)
+
+        while(True):
+            s = input()
+            s = s.strip()
+
+            if "drop" in s:
+                "Please don't delete anything from the database."
+            elif "quit" in s:
+                return
+            else:
+                s = "self.genes." + s
+                n = eval(s)
+                for entrez_doc in n:
+                    pprint(entrez_doc)
+
 
 def main():
 
     obj = Interaction()
 
-    s = input("Ready to load database? Y/N")
-    if (s = "Y"):
-        obj.load()
-    else:
-        exit()
+    obj.load()
 
     projectInfo = """
     CSCI 49369 - Big Data Project I
@@ -50,13 +74,14 @@ def main():
     B. Given an entrez id, find mean and std of gene expression values for AD/MCI/NCI, respectively
     C. Given an entrez id, find all other information associated with this gene
     D. Given a patient id, find all patient information (age, gender, education etc.)
-    E. Exit program
+    E. Advanced gene queries
+    F. Exit program
     """
     print(selectionMenu)
 
     selectedOption = "A"
 
-    while selectedOption != 'E':
+    while selectedOption != 'F':
         selectedOption = input("Select an option: ")
         if selectedOption == 'A':
             # query = query_norder.QueryNOrder()
@@ -77,9 +102,14 @@ def main():
             dummy = 0
 
         elif selectedOption == 'E':
+            # query = query_patient.QueryPatient()
+            # query.promptUser()
+            obj.advanced()
+
+        elif selectedOption == 'F':
             break
         else:
-            selectedOption = input("Input Error: Please enter a letter from A-E \n")
+            selectedOption = input("Input Error: Please enter a letter from A-F \n")
 
 
 

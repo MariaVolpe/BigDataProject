@@ -7,6 +7,8 @@ client = MongoClient()
 
 class LoadData:
 
+    loaded = False
+
     def __init__(self):
         #name of DB is GeneInformation
         self.db = client.GeneInformation
@@ -19,6 +21,9 @@ class LoadData:
         self.association = self.db.association
         #collection: expression information
         self.expression = self.db.expression
+
+        if len( self.db.collection_names() ) != 0:
+            self.loaded = True
 
     #load all files into database
     def load_files(self):
@@ -49,7 +54,6 @@ class LoadData:
         print("adding associated")
         #add associated genes to genes collection documents
         self.add_associated_id()
-
     
 
     #add uniprot id to genes collection documents
