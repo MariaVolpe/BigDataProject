@@ -1,6 +1,6 @@
 from pymongo import MongoClient
-import loaddata
-import querydata
+import load_gene
+import query_gene
 from pprint import pprint
 # import query_patient
 # import query_gene
@@ -16,16 +16,16 @@ class Interaction:
         self.genes = self.db.genes
         
     def load(self):
-        obj = loaddata.LoadData()
+        obj = load_gene.LoadGene()
         if obj.loaded == False:
             obj.load_files()
 
     def get_stats(self, entrez_id):
-        query_obj = querydata.QueryData()
+        query_obj = query_gene.QueryGene()
         query_obj.get_stats(entrez_id)
 
     def get_all(self, entrez_id):
-        query_obj = querydata.QueryData()
+        query_obj = query_gene.QueryGene()
         query_obj.get_all_information(entrez_id)
 
     def advanced(self):
