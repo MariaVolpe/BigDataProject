@@ -4,7 +4,6 @@ from internal import query_gene
 # from internal import query_patient
 # from internal import query_norder
 import tkinter as tk
-from pprint import pprint
 
 client = MongoClient()
 
@@ -135,13 +134,10 @@ class Interaction:
     def advanced(self):
         self.clear()
 
-        projectInfo = """
-        Advanced Query mode:
-        Enter your query in mongoDB syntax to search information about genes.
-        Ex. find({"gene_symbol" : "TNN"})
-        """
-        tk.Label(self.container_frame, text=projectInfo).pack()
-        e = tk.Entry(self.container_frame)
+        tk.Label(self.container_frame, text="Advanced Query Mode").pack(pady=(253,0),anchor="w")
+        tk.Label(self.container_frame, text="Enter your query in mongoDB syntax to search information about genes.").pack(anchor="w")
+        tk.Label(self.container_frame, text="Ex. find({\"gene_symbol\" : \"TNN\"})").pack(anchor="w")
+        e = tk.Entry(self.container_frame, width = 52)
         e.pack()
 
         tk.Button(self.container_frame, text = "Submit", command = lambda: self.advanced_2(e.get())).pack()
@@ -162,6 +158,9 @@ class Interaction:
 
             entry = "self.genes." + entry
             genes = eval(entry)
+
+            if len(genes) == 0:
+                tk.Label(info, text="No matches found.").pack(pady=(253,0), anchor="w")
 
             for doc in genes:
                 tk.Label(info, text="{").pack(anchor="w")
@@ -188,58 +187,6 @@ def main():
     obj.open_menu()
 
     root.mainloop()
-
-    projectInfo = """
-    CSCI 49369 - Big Data Project I
-    Creators: Maria Volpe and Maria Mahin
-    Project Description:
-    This project provides a python command-line interface for database
-    creation and query pertaining to the genomics data of Alzheimer's Disease
-    """
-    print(projectInfo)
-
-    selectionMenu = """
-    Please select from one of the following options:
-    A. Given an entrez id, find all of its n-order interacting genes
-    B. Given an entrez id, find mean and std of gene expression values for AD/MCI/NCI, respectively
-    C. Given an entrez id, find all other information associated with this gene
-    D. Given a patient id, find all patient information (age, gender, education etc.)
-    E. Advanced gene queries
-    F. Exit program
-    """
-    print(selectionMenu)
-
-    selectedOption = "A"
-
-    while selectedOption != 'F':
-        selectedOption = input("Select an option: ")
-        if selectedOption == 'A':
-            # query = query_norder.QueryNOrder()
-            # query.promptUser()
-            dummy = 0
-
-        elif selectedOption == 'B':
-            s = input("Entrez ID: ")
-            obj.get_stats(s)
-
-        elif selectedOption == 'C':
-            s = input("Entrez ID: ")
-            obj.get_all(s)
-
-        elif selectedOption == 'D':
-            # query = query_patient.QueryPatient()
-            # query.promptUser()
-            dummy = 0
-
-        elif selectedOption == 'E':
-            # query = query_patient.QueryPatient()
-            # query.promptUser()
-            obj.advanced()
-
-        elif selectedOption == 'F':
-            break
-        else:
-            selectedOption = input("Input Error: Please enter a letter from A-F \n")
 
 
 if __name__ == "__main__":
