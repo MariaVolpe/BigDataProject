@@ -22,8 +22,8 @@ class QueryGene:
     #given an entrez id, find all other information associated with the gene
     def get_all_information(self, gene_id):
         print("Querying all information for Entrez_ID: {}...".format(gene_id))
-        for entrez_doc in self.genes.find({'entrez_id':gene_id}):
-            pprint(entrez_doc)
+        n = self.genes.find({'entrez_id':gene_id})
+        return n
 
     #given an entrez id, find the mean and standard deviation of its expression for AD, MCI, and NCI
     # NCI - 1
@@ -34,26 +34,33 @@ class QueryGene:
         nci = []
         mci = []
         ad = []
-        for doc in self.expression.find({'DIAGNOSIS':'1'}):
-            nci.append(float(doc[gene_id]))
+        
+        arr = []
 
-        for doc in self.expression.find({ '$or': [{'DIAGNOSIS':'2'}, {'DIAGNOSIS':'3'}]}):
-            mci.append(float(doc[gene_id]))
+        if self.genes.find({'entrez_id':gene_id}).count() !=0:
 
-        for doc in self.expression.find({ '$or': [{'DIAGNOSIS':'4'}, {'DIAGNOSIS':'5'}]}):
-            ad.append(float(doc[gene_id]))
+            for doc in self.expression.find({'DIAGNOSIS':'1'}):
+                nci.append(float(doc[gene_id]))
 
-        x = self.find_mean(nci)
-        print("mean of nci: {}".format(x))
-        print("std of nci: {}".format( self.find_standard_deviation(nci, x) ))
+            for doc in self.expression.find({ '$or': [{'DIAGNOSIS':'2'}, {'DIAGNOSIS':'3'}]}):
+                mci.append(float(doc[gene_id]))
 
-        x = self.find_mean(mci)
-        print("mean of mci: {}".format(x))
-        print("std of mci: {}".format( self.find_standard_deviation(mci, x) ))
+            for doc in self.expression.find({ '$or': [{'DIAGNOSIS':'4'}, {'DIAGNOSIS':'5'}]}):
+                ad.append(float(doc[gene_id]))
 
-        x = self.find_mean(ad)
-        print("mean of ad: {}".format(x))
-        print("std of ad: {}".format( self.find_standard_deviation(ad, x) ))
+            x = self.find_mean(nci)
+            arr.append(x)
+            arr.append(self.find_standard_deviation(nci, x))
+
+            x = self.find_mean(mci)
+            arr.append(x)
+            arr.append(self.find_standard_deviation(nci, x))
+
+            x = self.find_mean(ad)
+            arr.append(x)
+            arr.append(self.find_standard_deviation(nci, x))
+
+        return arr
 
     #return mean of items in list data
     def find_mean(self, data):

@@ -94,12 +94,15 @@ class Interaction:
         query_obj = query_gene.QueryGene()
         arr = query_obj.get_stats(entrez_id)
 
-        tk.Label(stats, text = "Mean of NCI: {}".format(arr[0])).pack(pady=(253,0),anchor="w")
-        tk.Label(stats, text = "STD of NCI: {}".format(arr[1])).pack(anchor="w")
-        tk.Label(stats, text = "Mean of MCI: {}".format(arr[2])).pack(anchor="w")
-        tk.Label(stats, text = "STD of MCI: {}".format(arr[3])).pack(anchor="w")
-        tk.Label(stats, text = "Mean of AD: {}".format(arr[4])).pack(anchor="w")
-        tk.Label(stats, text = "STD of AD: {}".format(arr[5])).pack(anchor="w")
+        if len(arr) == 0:
+            tk.Label(stats, text="No matches found.").pack(pady=(253,0), anchor="w")
+        else:
+            tk.Label(stats, text = "Mean of NCI: {}".format(arr[0])).pack(pady=(253,0),anchor="w")
+            tk.Label(stats, text = "STD of NCI: {}".format(arr[1])).pack(anchor="w")
+            tk.Label(stats, text = "Mean of MCI: {}".format(arr[2])).pack(anchor="w")
+            tk.Label(stats, text = "STD of MCI: {}".format(arr[3])).pack(anchor="w")
+            tk.Label(stats, text = "Mean of AD: {}".format(arr[4])).pack(anchor="w")
+            tk.Label(stats, text = "STD of AD: {}".format(arr[5])).pack(anchor="w")
 
         tk.Button(stats, text="Back to Menu", command = self.open_menu).pack()
         tk.Button(stats, text="Quit", command = self.end).pack()
@@ -113,6 +116,9 @@ class Interaction:
 
         query_obj = query_gene.QueryGene()
         genes = query_obj.get_all_information(entrez_id)
+
+        if len(genes) == 0:
+            tk.Label(info, text="No matches found.").pack(pady=(253,0), anchor="w")
 
         for doc in genes:
             tk.Label(info, text="{").pack(anchor="w")
