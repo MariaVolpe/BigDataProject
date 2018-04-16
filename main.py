@@ -1,8 +1,8 @@
 from pymongo import MongoClient
 from internal import load_gene
 from internal import query_gene
-# from internal import query_patient
-# from internal import query_norder
+from internal import query_patient
+from internal import query_norder
 import tkinter as tk
 
 client = MongoClient()
@@ -64,7 +64,10 @@ class Interaction:
             e = tk.Entry(self.container_frame)
             e.pack()
             if option == 1:
-                tk.Button(self.container_frame, text="Submit", command=lambda: self.get_norder(e.get()) ).pack()
+                tk.Label(self.container_frame, text="N: ").pack(pady=(253,0),anchor="w")
+                e2 = tk.Entry(self.container_frame)
+                e2.pack()
+                tk.Button(self.container_frame, text="Submit", command=lambda: self.get_norder(e.get(), e2.get()) ).pack()
             elif option == 2:
                 tk.Button(self.container_frame, text="Submit", command=lambda: self.get_stats(e.get()) ).pack()
             elif option == 3:
@@ -81,9 +84,14 @@ class Interaction:
         elif option == 5:
             tk.Button(self.container_frame, text="Submit", command= self.advanced).pack()
 
-    def get_norder(self, entrez_id):
+    def get_norder(self, entrez_id, n):
         self.clear()
-        dummy = 0
+
+        obj = query_norder.QueryNOrder()
+        obj.retrieveData(entrez_id, n, self.container_frame)
+        
+        tk.Button(self.container_frame, text="Back to Menu", command = self.open_menu).pack()
+        tk.Button(self.container_frame, text="Quit", command = self.end).pack()
 
     def get_stats(self, entrez_id):
         self.clear()
@@ -110,7 +118,7 @@ class Interaction:
 
     def get_all(self, entrez_id):
         self.clear()
-        print(entrez_id)
+        
         info = tk.Frame(self.container_frame)
         info.pack()
 
@@ -131,8 +139,11 @@ class Interaction:
         tk.Button(self.container_frame, text="Back to Menu", command = self.open_menu).pack()
         tk.Button(self.container_frame, text="Quit", command = self.end).pack()
 
-    def get_patient(self, entrez_id):
+    def get_patient(self, patient_id):
         self.clear()
+
+        obj = query_patient.QueryPatient()
+        obj.queryPatient(patient_id, self.container_frame)
 
         tk.Button(self.container_frame, text="Back to Menu", command = self.open_menu).pack()
         tk.Button(self.container_frame, text="Quit", command = self.end).pack()
