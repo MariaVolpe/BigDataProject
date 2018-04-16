@@ -1,8 +1,8 @@
 from pymongo import MongoClient
 from internal import load_gene
 from internal import query_gene
-from internal import query_patient
-from internal import query_norder
+# from internal import query_patient
+# from internal import query_norder
 import tkinter as tk
 
 client = MongoClient()
@@ -64,7 +64,7 @@ class Interaction:
             e = tk.Entry(self.container_frame)
             e.pack()
             if option == 1:
-                tk.Label(self.container_frame, text="N: ").pack(pady=(253,0),anchor="w")
+                tk.Label(self.container_frame, text="N: ").pack(anchor="w")
                 e2 = tk.Entry(self.container_frame)
                 e2.pack()
                 tk.Button(self.container_frame, text="Submit", command=lambda: self.get_norder(e.get(), e2.get()) ).pack()
