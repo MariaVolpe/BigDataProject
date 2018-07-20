@@ -1,10 +1,14 @@
-Maria Mahin
-
 Maria Volpe
 
 Project 1
 
 CSCI 49371: Big Data
+
+
+-----------------------------------
+Important Note
+-----------------------------------
+This was a two person project for a Big Data class. This readme includes information about the full project, but the repo only contains my portion of the project, which is the MongoDB portion and a GUI that will crash if attempts to access the other databases are made.
 
 -----------------------------------
 Introduction
